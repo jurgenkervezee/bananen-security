@@ -6,7 +6,7 @@ import {AuthContext} from "./AuthContext";
 function NavBar() {
     const history = useHistory();
     const {auth, logout} = useContext(AuthContext);
-    console.log(auth);
+    // console.log(auth);
 
     return (
         <nav>

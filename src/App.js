@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Switch, Route, useHistory} from 'react-router-dom';
+import {Switch, Route, useHistory, Redirect} from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
@@ -10,7 +10,7 @@ import {AuthContext} from "./components/AuthContext";
 
 function App() {
 
-    const {auth} = useContext(AuthContext);
+    const {isAuth} = useContext(AuthContext);
     const history = useHistory();
 
     return (
@@ -21,13 +21,11 @@ function App() {
                     <Route exact path="/">
                         <Home/>
                     </Route>
-                    {auth ?
+
                         <Route path="/profile">
-                            <Profile/>
+                            {isAuth ? <Profile/>: <Redirect to="/signin"/> }
                         </Route>
-                        :
-                        history.push('/signin')
-                    }
+
                     <Route exact path="/signin">
                         <SignIn/>
                     </Route>

@@ -9,24 +9,27 @@ const AuthContextProvider = ({children}) => {
 
     const [isAuth, toggleIsAuth] = useState({
         isAuth: false,
-        user: ''
+        user: null
     });
     const history = useHistory();
 
-    function signIn() {
-        toggleIsAuth(true);
-        console.log('gebruiker is ingelogd');
+    function signIn(jwtToken) {
+        localStorage.setItem('token', jwtToken);
+        toggleIsAuth({...isAuth, isAuth: true});
+
+        // console.log('gebruiker is ingelogd');
         history.push('/profile');
     }
 
     function signOut() {
-        toggleIsAuth(false);
+        toggleIsAuth({...isAuth, isAuth: false, user: null});
         console.log('gebruiker is uitgelogd');
         history.push('/');
     }
 
-    const data = {
-        auth: isAuth,
+    const contextData = {
+        isAuth: isAuth.isAuth,
+        user: isAuth.user,
         login: signIn,
         logout: signOut,
 
@@ -35,7 +38,7 @@ const AuthContextProvider = ({children}) => {
     };
 
     return (
-        <AuthContext.Provider value={data}>
+        <AuthContext.Provider value={contextData}>
             {children}
         </AuthContext.Provider>
     );
