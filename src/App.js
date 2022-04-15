@@ -11,7 +11,7 @@ import {AuthContext} from "./components/AuthContext";
 function App() {
 
     const {isAuth} = useContext(AuthContext);
-    const history = useHistory();
+    // const history = useHistory();
 
     return (
         <>

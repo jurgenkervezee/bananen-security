@@ -14,20 +14,17 @@ function SignIn() {
         e.preventDefault();
 
         try {
-
             const result = await axios.post('http://localhost:3000/login', {
                 email: email,
                 password: password,
 
-            })
+            });
             console.log(result.data.accessToken);
             login(result.data.accessToken);
 
-        }catch(e){
-            console.error(e)
+        } catch (e) {
+            console.error(e);
         }
-
-
     }
 
     return (

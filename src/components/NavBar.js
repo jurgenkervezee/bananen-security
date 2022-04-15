@@ -5,8 +5,7 @@ import {AuthContext} from "./AuthContext";
 
 function NavBar() {
     const history = useHistory();
-    const {auth, logout} = useContext(AuthContext);
-    // console.log(auth);
+    const {isAuth, logout} = useContext(AuthContext);
 
     return (
         <nav>
@@ -20,7 +19,7 @@ function NavBar() {
             </Link>
 
             <div>
-                {!auth ?
+                {!isAuth ?
                     <>
                         <button
                             type="button"

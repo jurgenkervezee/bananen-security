@@ -19,8 +19,9 @@ function SignUp() {
                 username: {userName},
             }
         )
+
         try{
-          const token = await axios.post('http://localhost:3000/register',
+          await axios.post('http://localhost:3000/register',
                {
                 email: email,
                 password: password,
@@ -32,8 +33,6 @@ function SignUp() {
             console.error(e)
         }
     }
-
-
 
     return (
         <>
