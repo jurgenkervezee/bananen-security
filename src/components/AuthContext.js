@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {createContext} from "react";
 import {useHistory} from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -10,12 +10,28 @@ const AuthContextProvider = ({children}) => {
 
     const [isAuth, setIsAuth] = useState({
         isAuth: false,
-        user: null
+        user: null,
+        status: 'pending',
     });
     const history = useHistory();
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            const decodedToken = jwt_decode(token);
+            getUserData(decodedToken.sub, token);
+
+        }else{
+            setIsAuth({
+                ...isAuth,
+                status: 'done',
+            });
+        }
+
+    }, []);
+
     async function getUserData(id, token) {
-        // const decodedJwt = jwt_decode(jwtToken);
         try {
             const userData = await axios.get(`http://localhost:3000/600/users/${id}`, {
                 headers: {
@@ -24,8 +40,6 @@ const AuthContextProvider = ({children}) => {
                 }
             });
 
-
-
             setIsAuth({
                 ...isAuth,
                 isAuth: true,
@@ -33,10 +47,10 @@ const AuthContextProvider = ({children}) => {
                     id: userData.data.id,
                     username: userData.data.username,
                     email: userData.data.email,
-                }});
+                },
+                status: 'done',
+            });
             history.push('/profile');
-            console.log("Na de toewijzing")
-            console.log(isAuth);
 
         } catch (e) {
             console.error(e);
@@ -53,7 +67,7 @@ const AuthContextProvider = ({children}) => {
     function signOut() {
         setIsAuth({...isAuth, isAuth: false, user: null});
         localStorage.clear();
-        console.log('gebruiker is uitgelogd');
+        // console.log('gebruiker is uitgelogd');
         history.push('/');
     }
 
@@ -66,7 +80,7 @@ const AuthContextProvider = ({children}) => {
 
     return (
         <AuthContext.Provider value={contextData}>
-            {children}
+            {isAuth.status === 'done' ? children : <p>Loading...</p> }
         </AuthContext.Provider>
     );
 };
